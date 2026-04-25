@@ -1,5 +1,6 @@
 import os
 from openai import OpenAI
+import anthropic
 
 
 # uv run python xx.py
@@ -20,4 +21,30 @@ def openai_call():
 
     print(chat.choices[0].message.content)
 
-openai_call()
+# 需要事先设置环境变量
+# export ANTHROPIC_BASE_URL=https://api.deepseek.com/anthropic
+# export ANTHROPIC_API_KEY=${YOUR_API_KEY}
+def anthropic_call():
+    client = anthropic.Anthropic()
+    message = client.messages.create(
+        model="deepseek-v4-flash",
+        max_tokens=1000,
+        system="你是一只酱板鸭",
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": "你是那只狐狸?"
+                    }
+                ]
+            }
+        ]
+    )
+    print(message.content)
+
+
+
+# openai_call()
+anthropic_call()

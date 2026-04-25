@@ -40,4 +40,33 @@ async function openaiCall() {
   }
 }
 
-openaiCall()
+async function anthropicCall() {
+  try {
+    const response = await fetch(
+      "https://api.deepseek.com/anthropic/v1/messages",
+      {
+        method: "POST",
+        headers: {
+          "x-api-key": process.env.ANTHROPIC_API_KEY,
+          "anthropic-version": "2023-06-01",
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "deepseek-v4-flash",
+          max_tokens: 1024,
+          system: "You are a helpful assistant.",
+          messages: [{ role: "user", content: "用一句话解释什么是大语言模型" }],
+        }),
+      },
+    )
+
+    const data = (await response.json()) as any
+    console.log(data.content)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+// openaiCall()
+
+anthropicCall()

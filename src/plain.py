@@ -4,7 +4,7 @@ import requests
 api_key = os.environ.get("DEEPSEEK_API_KEY")
 
 
-def bootstrap():
+def openai():
     response = requests.post(
         "https://api.deepseek.com/v1/chat/completions",
         headers={
@@ -23,4 +23,28 @@ def bootstrap():
     data = response.json()
     print(data["choices"][0]["message"]["content"])
 
-bootstrap()
+
+def anthropic():
+    response = requests.post(
+        "https://api.deepseek.com/anthropic/v1/messages",
+        headers={
+            "x-api-key": os.environ.get("ANTHROPIC_API_KEY"),
+            "anthropic-version": "2023-06-01",
+            "content-type": "application/json"
+        },
+        json={
+            "model": "deepseek-v4-pro",
+            "max_tokens": 1024,
+            "system": "You are a helpful assistant.",
+            "messages": [
+                {"role": "user", "content": "用一句话解释什么是大语言模型"}
+            ]
+        }
+    )
+
+    data = response.json()
+    # content 是列表，需找到 type="text" 的元素
+    print(data.content)
+
+# openai()
+anthropic()
